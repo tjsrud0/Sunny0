@@ -1,5 +1,26 @@
 # Sunny0
-package Java;
+
+                buttons[i][j] = new JButton(buttonLabels[i * 4 + j]);
+                buttons[i][j].setBackground(Color.LIGHT_GRAY);
+                buttons[i][j].setForeground(Color.BLACK);
+                buttons[i][j].addActionListener(this);
+                buttonPanel.add(buttons[i][j]);
+            }
+        }
+
+        add(buttonPanel, BorderLayout.CENTER);
+        setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+
+        // 텍스트 필드에 버튼 클릭 내용을 표시
+        if (command.equals("Backspace")) {
+            String currentText = textField.getText();
+            if (currentText.length() > 0) {
+                textField.setText(currentText.substring(0, currentText.lepackage Java;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,28 +61,7 @@ public class Calculator extends JFrame implements ActionListener {
         // 버튼 생성 및 추가
         buttons = new JButton[5][4];
         for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 4; j++) {
-                buttons[i][j] = new JButton(buttonLabels[i * 4 + j]);
-                buttons[i][j].setBackground(Color.LIGHT_GRAY);
-                buttons[i][j].setForeground(Color.BLACK);
-                buttons[i][j].addActionListener(this);
-                buttonPanel.add(buttons[i][j]);
-            }
-        }
-
-        add(buttonPanel, BorderLayout.CENTER);
-        setVisible(true);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
-
-        // 텍스트 필드에 버튼 클릭 내용을 표시
-        if (command.equals("Backspace")) {
-            String currentText = textField.getText();
-            if (currentText.length() > 0) {
-                textField.setText(currentText.substring(0, currentText.length() - 1));
+            for (int j = 0; j < 4; j++) {ngth() - 1));
                 if (textField.getText().isEmpty()) {
                     textField.setText("0");
                 }
