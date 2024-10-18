@@ -7,32 +7,32 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Calculator extends JFrame implements ActionListener {
-    private JTextField textField;
+    private JTextField displayField;
     private JButton[][] buttons;
     private String[] buttonLabels = {
+        "1", "2", "3", "+",
+        "4", "5", "6", "-",
         "7", "8", "9", "/",
-        "4", "5", "6", "x",
-        "1", "2", "3", "-",
-        "0", ".", "+", "=",
-        "C", "CE", "Backspace", ""
+        "C", "0", "x", "=",
+        "CE", "Backspace", ".", ""
     };
-    private String operator;
-    private double firstNumber;
+    private String currentOperator;
+    private double firstOperand;
 
     public Calculator() {
         // 프레임 설정
-        setTitle("계산기");
+        setTitle("Simple Calculator");
         setSize(400, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // 텍스트 필드 생성
-        textField = new JTextField("0");
-        textField.setEditable(false);
-        textField.setBackground(Color.WHITE);
-        textField.setHorizontalAlignment(JTextField.RIGHT);
-        textField.setFont(new Font("Arial", Font.PLAIN, 24)); // 글씨 크기 증가
-        add(textField, BorderLayout.NORTH);
+        displayField = new JTextField("0");
+        displayField.setEditable(false);
+        displayField.setBackground(Color.WHITE); // 배경색 하얀색으로 변경
+        displayField.setHorizontalAlignment(JTextField.RIGHT);
+        displayField.setFont(new Font("Arial", Font.BOLD, 24)); // 글씨 크기 증가
+        add(displayField, BorderLayout.NORTH);
 
         // 버튼 패널 생성
         JPanel buttonPanel = new JPanel();
@@ -43,8 +43,8 @@ public class Calculator extends JFrame implements ActionListener {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
                 buttons[i][j] = new JButton(buttonLabels[i * 4 + j]);
-                buttons[i][j].setBackground(Color.LIGHT_GRAY);
-                buttons[i][j].setForeground(Color.BLACK);
+                buttons[i][j].setBackground(Color.GRAY);
+                buttons[i][j].setForeground(Color.WHITE);
                 buttons[i][j].addActionListener(this);
                 buttonPanel.add(buttons[i][j]);
             }
@@ -60,65 +60,58 @@ public class Calculator extends JFrame implements ActionListener {
 
         // 텍스트 필드에 버튼 클릭 내용을 표시
         if (command.equals("Backspace")) {
-            String currentText = textField.getText();
+            String currentText = displayField.getText();
             if (currentText.length() > 0) {
-                textField.setText(currentText.substring(0, currentText.length() - 1));
-                if (textField.getText().isEmpty()) {
-                    textField.setText("0");
+                displayField.setText(currentText.substring(0, currentText.length() - 1));
+                if (displayField.getText().isEmpty()) {
+                    displayField.setText("0");
                 }
             }
         } else if (command.equals("CE")) {
-            textField.setText("0");
+            displayField.setText("0");
         } else if (command.equals("C")) {
-            operator = null;
-            firstNumber = 0;
-            textField.setText("0");
+            currentOperator = null;
+            firstOperand = 0;
+            displayField.setText("0");
         } else if (command.equals("=")) {
-            String secondNumberStr = textField.getText();
-            if (!secondNumberStr.equals("0")) {
-                double secondNumber = Double.parseDouble(secondNumberStr);
+            String secondOperandStr = displayField.getText();
+            if (!secondOperandStr.equals("0")) {
+                double secondOperand = Double.parseDouble(secondOperandStr);
                 double result = 0;
 
-                switch (operator) {
+                switch (currentOperator) {
                     case "+":
-                        result = firstNumber + secondNumber;
+                        result = firstOperand + secondOperand;
                         break;
                     case "-":
-                        result = firstNumber - secondNumber;
+                        result = firstOperand - secondOperand;
                         break;
                     case "x":
-                        result = firstNumber * secondNumber;
+                        result = firstOperand * secondOperand;
                         break;
                     case "/":
-                        if (secondNumber != 0) {
-                            result = firstNumber / secondNumber;
+                        if (secondOperand != 0) {
+                            result = firstOperand / secondOperand;
                         } else {
-                            JOptionPane.showMessageDialog(this, "0으로 나눌 수 없습니다.");
+                            JOptionPane.showMessageDialog(this, "Cannot divide by zero.");
                             return;
                         }
                         break;
                 }
-                textField.setText(String.valueOf(result));
-                operator = null; // 연산자 초기화
+                displayField.setText(String.valueOf(result));
+                currentOperator = null; // 연산자 초기화
             }
         } else if ("+".equals(command) || "-".equals(command) || "x".equals(command) || "/".equals(command)) {
-            firstNumber = Double.parseDouble(textField.getText());
-            operator = command.equals("x") ? "*" : command; // 'x'를 '*'로 변환
-            textField.setText("0");
+            firstOperand = Double.parseDouble(displayField.getText());
+            currentOperator = command.equals("x") ? "*" : command; // 'x'를 '*'로 변환
+            displayField.setText("0");
         } else {
-            if (textField.getText().equals("0")) {
-                textField.setText(command);
+            if (displayField.getText().equals("0")) {
+                displayField.setText(command);
             } else {
-                textField.setText(textField.getText() + command);
+                displayField.setText(displayField.getText() + command);
             }
         }
-    }
-
-    public static void main(String[] args) {
-        new Calculator();
-    }
-}
-
     }
 
     public static void main(String[] args) {
